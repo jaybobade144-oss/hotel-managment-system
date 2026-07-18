@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from '../components/StarRating';
+import { API_URL } from '../config';
 
 const Dashboard = ({ user }) => {
   const [activeTab, setActiveTab] = useState('bookings');
@@ -22,14 +23,14 @@ const Dashboard = ({ user }) => {
     setLoading(true);
     try {
       // Fetch user's bookings
-      const bookingRes = await fetch('http://localhost:5001/api/bookings/my', {
+      const bookingRes = await fetch(`${API_URL}/api/bookings/my`, {
         headers: { 'Authorization': `Bearer ${user.token}` }
       });
       const bookingData = await bookingRes.json();
       setBookings(bookingData);
 
       // Fetch user's reviews
-      const reviewRes = await fetch('http://localhost:5001/api/reviews/my', {
+      const reviewRes = await fetch(`${API_URL}/api/reviews/my`, {
         headers: { 'Authorization': `Bearer ${user.token}` }
       });
       const reviewData = await reviewRes.json();
@@ -46,7 +47,7 @@ const Dashboard = ({ user }) => {
     if (!window.confirm('Are you sure you want to cancel this booking?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5001/api/bookings/${bookingId}/status`, {
+      const res = await fetch(`${API_URL}/api/bookings/${bookingId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ const Dashboard = ({ user }) => {
   const handleUpdateReview = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5001/api/reviews/${editingReviewId}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${editingReviewId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +92,7 @@ const Dashboard = ({ user }) => {
       if (res.ok) {
         setEditingReviewId(null);
         // Refresh user's reviews
-        const reviewRes = await fetch('http://localhost:5001/api/reviews/my', {
+        const reviewRes = await fetch(`${API_URL}/api/reviews/my`, {
           headers: { 'Authorization': `Bearer ${user.token}` }
         });
         const reviewData = await reviewRes.json();
@@ -109,7 +110,7 @@ const Dashboard = ({ user }) => {
     if (!window.confirm('Are you sure you want to delete this review?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5001/api/reviews/${reviewId}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`

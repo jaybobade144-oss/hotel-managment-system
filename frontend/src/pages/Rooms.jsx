@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import RoomCard from '../components/RoomCard';
+import { API_URL } from '../config';
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -27,7 +28,7 @@ const Rooms = () => {
 
   const fetchRooms = () => {
     setLoading(true);
-    let url = 'http://localhost:5001/api/rooms?';
+    let url = `${API_URL}/api/rooms?`;
     if (type && type !== 'All') {
       url += `type=${type}&`;
     }

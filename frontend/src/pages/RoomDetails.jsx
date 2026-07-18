@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import StarRating from '../components/StarRating';
+import { API_URL } from '../config';
 
 const RoomDetails = ({ user }) => {
   const { id } = useParams();
@@ -35,14 +36,14 @@ const RoomDetails = ({ user }) => {
   const fetchRoomAndReviews = async () => {
     setLoading(true);
     try {
-      const roomRes = await fetch(`http://localhost:5001/api/rooms/${id}`);
+      const roomRes = await fetch(`${API_URL}/api/rooms/${id}`);
       const roomData = await roomRes.json();
       setRoom(roomData);
       if (roomData.imageUrls && roomData.imageUrls.length > 0) {
         setActiveImage(roomData.imageUrls[0]);
       }
 
-      const reviewRes = await fetch(`http://localhost:5001/api/reviews/room/${id}`);
+      const reviewRes = await fetch(`${API_URL}/api/reviews/room/${id}`);
       const reviewData = await reviewRes.json();
       setReviews(reviewData);
 
@@ -82,7 +83,7 @@ const RoomDetails = ({ user }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:5001/api/bookings', {
+      const res = await fetch(`${API_URL}/api/bookings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ const RoomDetails = ({ user }) => {
     setReviewSuccess(null);
 
     try {
-      const res = await fetch('http://localhost:5001/api/reviews', {
+      const res = await fetch(`${API_URL}/api/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -135,7 +136,7 @@ const RoomDetails = ({ user }) => {
         setComment('');
         setRating(5);
         // Refresh reviews list
-        const reviewRes = await fetch(`http://localhost:5001/api/reviews/room/${id}`);
+        const reviewRes = await fetch(`${API_URL}/api/reviews/room/${id}`);
         const reviewData = await reviewRes.json();
         setReviews(reviewData);
       }
@@ -148,7 +149,7 @@ const RoomDetails = ({ user }) => {
     if (!window.confirm('Are you sure you want to delete this review?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5001/api/reviews/${reviewId}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`
@@ -175,7 +176,7 @@ const RoomDetails = ({ user }) => {
   const handleReviewUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5001/api/reviews/${editingReviewId}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${editingReviewId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -190,7 +191,7 @@ const RoomDetails = ({ user }) => {
       if (res.ok) {
         setEditingReviewId(null);
         // Refresh reviews list
-        const reviewRes = await fetch(`http://localhost:5001/api/reviews/room/${id}`);
+        const reviewRes = await fetch(`${API_URL}/api/reviews/room/${id}`);
         const reviewData = await reviewRes.json();
         setReviews(reviewData);
       } else {

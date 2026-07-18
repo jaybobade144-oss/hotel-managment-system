@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from '../components/StarRating';
+import { API_URL } from '../config';
 
 const AdminDashboard = ({ user }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -31,19 +32,19 @@ const AdminDashboard = ({ user }) => {
     setLoading(true);
     try {
       // Get all rooms
-      const roomRes = await fetch('http://localhost:5001/api/rooms');
+      const roomRes = await fetch(`${API_URL}/api/rooms`);
       const roomData = await roomRes.json();
       setRooms(roomData);
 
       // Get all bookings
-      const bookingRes = await fetch('http://localhost:5001/api/bookings', {
+      const bookingRes = await fetch(`${API_URL}/api/bookings`, {
         headers: { 'Authorization': `Bearer ${user.token}` }
       });
       const bookingData = await bookingRes.json();
       setBookings(bookingData);
 
       // Get all reviews
-      const reviewRes = await fetch('http://localhost:5001/api/reviews', {
+      const reviewRes = await fetch(`${API_URL}/api/reviews`, {
         headers: { 'Authorization': `Bearer ${user.token}` }
       });
       const reviewData = await reviewRes.json();
@@ -99,8 +100,8 @@ const AdminDashboard = ({ user }) => {
 
     try {
       const url = editingRoomId 
-        ? `http://localhost:5001/api/rooms/${editingRoomId}`
-        : 'http://localhost:5001/api/rooms';
+        ? `${API_URL}/api/rooms/${editingRoomId}`
+        : `${API_URL}/api/rooms`;
       
       const method = editingRoomId ? 'PUT' : 'POST';
 
@@ -129,7 +130,7 @@ const AdminDashboard = ({ user }) => {
     if (!window.confirm('Are you sure you want to delete this room? This cannot be undone.')) return;
 
     try {
-      const res = await fetch(`http://localhost:5001/api/rooms/${roomId}`, {
+      const res = await fetch(`${API_URL}/api/rooms/${roomId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`
@@ -149,7 +150,7 @@ const AdminDashboard = ({ user }) => {
 
   const handleUpdateBookingStatus = async (bookingId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/bookings/${bookingId}/status`, {
+      const res = await fetch(`${API_URL}/api/bookings/${bookingId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +174,7 @@ const AdminDashboard = ({ user }) => {
     if (!window.confirm('Are you sure you want to delete this review? (Admin moderation)')) return;
 
     try {
-      const res = await fetch(`http://localhost:5001/api/reviews/${reviewId}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`

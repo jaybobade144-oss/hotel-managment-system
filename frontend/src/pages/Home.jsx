@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import RoomCard from '../components/RoomCard';
+import { API_URL } from '../config';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Home = () => {
   });
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/rooms')
+    fetch(`${API_URL}/api/rooms`)
       .then((res) => res.json())
       .then((data) => {
         // Just show Deluxe and Suite as featured
